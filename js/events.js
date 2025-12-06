@@ -1,3 +1,6 @@
+import { g, app } from './main.js';
+import { opt, toggleMenu, togglePause } from './opt.js';
+
 (() => {
 	const prevent = e => e.preventDefault();
 

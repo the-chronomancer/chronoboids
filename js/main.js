@@ -1,3 +1,9 @@
+import { V2D, v2dPool } from './v2d.js';
+import { max } from './util.js';
+import { opt, select, setGlobals } from './opt.js';
+import { Flock, setFlockGlobals } from './flock.js';
+import { setBoidGlobals } from './boid.js';
+
 // useful global variables
 const g = {
 	mouseForce: 0,
@@ -36,10 +42,8 @@ const g = {
 	delta: 1,
 	shapeMode: 1,
 
-	bias: parseFloat(opt.rbias),
 	noiseRange: (Math.PI / 80) * opt.noise,
 
-	fpsA: [],
 	fps: 60
 };
 
@@ -56,9 +60,19 @@ const app = new PIXI.Application({
 
 document.body.prepend(app.view);
 
-let flock = new Flock(opt.boids);
+// Inject dependencies into modules
+setBoidGlobals(g, app);
+setFlockGlobals(g, app);
+
+const flock = new Flock(opt.boids);
+
+// Now inject flock into opt for restart functionality
+setGlobals(g, flock);
 
 function loop(delta) {
+	// Reset vector pool at start of each frame to reuse allocations
+	v2dPool.reset();
+
 	g.delta = delta;
 
 	g.mouseForce = max(
@@ -95,9 +109,8 @@ function loop(delta) {
 	}
 
 	if (opt.debug) {
-		g.fpsA.push(60 / delta);
-		g.fps = g.fpsA.reduce((a, v) => a + v, 0) / 10;
-		if (g.fpsA.length >= 10) g.fpsA.shift();
+		// O(1) exponential moving average instead of O(n) array reduce
+		g.fps = g.fps * 0.9 + (60 / delta) * 0.1;
 		select("#fps").textContent = g.fps.toFixed(2);
 	}
 
@@ -105,3 +118,6 @@ function loop(delta) {
 }
 
 app.ticker.add(loop);
+
+// Export for events.js
+export { g, app, flock };

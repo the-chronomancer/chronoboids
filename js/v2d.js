@@ -3,7 +3,7 @@
 /**
  * 2D vector
  */
-class V2D {
+export class V2D {
 	/**
 	 * Returns a new V2D from an array with components in [0] and [1]
 	 * @param {Array} v Array to copy
@@ -350,3 +350,56 @@ class V2D {
 		return this;
 	}
 }
+
+/**
+ * Object pool for V2D vectors to reduce GC pressure
+ * Pre-allocates vectors and reuses them instead of creating new ones each frame
+ */
+class V2DPool {
+	constructor(initialSize = 100) {
+		this.pool = [];
+		this.index = 0;
+		// Pre-allocate vectors
+		for (let i = 0; i < initialSize; i++) {
+			this.pool.push(new V2D());
+		}
+	}
+
+	/**
+	 * Get a vector from the pool, initialized to (x, y)
+	 * @param {number} x X component
+	 * @param {number} y Y component
+	 * @returns {V2D}
+	 */
+	get(x = 0, y = 0) {
+		if (this.index >= this.pool.length) {
+			// Expand pool if needed
+			this.pool.push(new V2D());
+		}
+		const v = this.pool[this.index++];
+		v.x = x;
+		v.y = y;
+		return v;
+	}
+
+	/**
+	 * Reset the pool index for the next frame
+	 * Call this at the start of each frame
+	 */
+	reset() {
+		this.index = 0;
+	}
+
+	/**
+	 * Get current pool stats for debugging
+	 */
+	get stats() {
+		return {
+			size: this.pool.length,
+			used: this.index
+		};
+	}
+}
+
+// Global pool instance - reset at start of each frame
+export const v2dPool = new V2DPool(500);

@@ -1,4 +1,16 @@
-class Flock {
+import { Boid } from './boid.js';
+import { opt } from './opt.js';
+
+// These will be injected from main.js
+let g = null;
+let app = null;
+
+export function setFlockGlobals(globals, pixiApp) {
+	g = globals;
+	app = pixiApp;
+}
+
+export class Flock {
 	constructor(boids) {
 		this.length = boids;
 		this.boids = [];
@@ -25,7 +37,7 @@ class Flock {
 		else {
 			this.organize();
 			for (const boid of this.boids) {
-				boid.flock(flock);
+				boid.flock(this);
 				boid.interact();
 			}
 		}
@@ -90,7 +102,15 @@ class Flock {
 			app.stage.addChild(shape);
 		}
 
-		this.buckets.fill(undefined);
+		// O(k) where k = active cells, instead of O(total cells) with .fill()
+		// Clear only the cells that were used last frame
+		for (const row of this.buckets) {
+			if (row) {
+				for (let i = 0; i < row.length; i++) {
+					if (row[i]) row[i].length = 0;
+				}
+			}
+		}
 
 		for (const boid of this.boids) {
 			const row = Math.floor(boid.y / this.space.scale);

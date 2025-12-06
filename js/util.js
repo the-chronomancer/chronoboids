@@ -1,4 +1,4 @@
-const random = (() => {
+export const random = (() => {
 	const size = 1000000;
 	const lookup = new Array(size);
 	let i = -1;
@@ -13,18 +13,18 @@ const random = (() => {
 	};
 })();
 
-function max(a, b) {
+export function max(a, b) {
 	if (a >= b) return a;
 	return b;
 }
 
-function constrain(x, a, b) {
+export function constrain(x, a, b) {
 	if (x <= a) return a;
 	if (x >= b) return b;
 	return x;
 }
 
-function hsv(h, s, v) {
+export function hsv(h, s, v) {
 	let r, g, b, i, f, p, q, t;
 
 	i = Math.floor(h * 6);

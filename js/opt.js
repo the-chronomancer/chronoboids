@@ -1,4 +1,4 @@
-const select = (() => {
+export const select = (() => {
 	const cached = new Map();
 	return query => {
 		if (cached.has(query)) return cached.get(query);
@@ -8,9 +8,18 @@ const select = (() => {
 	};
 })();
 
-let toggleMenu, togglePause;
+// These will be set by main.js after initialization
+let g = null;
+let flock = null;
 
-const opt = (() => {
+export function setGlobals(globals, flockInstance) {
+	g = globals;
+	flock = flockInstance;
+}
+
+export let toggleMenu, togglePause;
+
+export const opt = (() => {
 	const defaults = {
 		menu: true,
 		paused: false,
@@ -98,7 +107,7 @@ const opt = (() => {
 				model === "outlines" ||
 				model === "halfAreas"
 			) {
-				g.shapeMode++;
+				if (g) g.shapeMode++;
 			}
 		});
 	}
@@ -121,7 +130,7 @@ const opt = (() => {
 					data.accuracy
 				);
 				return;
-			} else if (model === "vision") g.shapeMode++;
+			} else if (model === "vision" && g) g.shapeMode++;
 
 			select(`[data-show=${model}]`).textContent = data[model];
 		});
@@ -141,7 +150,7 @@ const opt = (() => {
 				select(`[data-show=accuracy]`).textContent = data.accuracy;
 			else select(`[data-show=${model}]`).textContent = data[model];
 		}
-		if (typeof g !== "undefined") g.shapeMode++;
+		if (g) g.shapeMode++;
 	}
 	updateAll();
 
@@ -160,7 +169,7 @@ const opt = (() => {
 
 	const methods = {
 		restart() {
-			flock.reset();
+			if (flock) flock.reset();
 		},
 
 		reset() {
@@ -169,7 +178,7 @@ const opt = (() => {
 		},
 
 		next() {
-			g.nextFrame = true;
+			if (g) g.nextFrame = true;
 		},
 
 		exportSave() {
@@ -210,7 +219,8 @@ const opt = (() => {
 			let split;
 			try {
 				split = atob(str).split("|");
-			} catch {
+			} catch (err) {
+				console.warn("Failed to decode settings:", err.message);
 				return;
 			}
 			const args = new Map();
@@ -236,9 +246,17 @@ const opt = (() => {
 			updateAll();
 		},
 
-		copy() {
-			document.getElementById("exporter").select();
-			document.execCommand("copy");
+		async copy() {
+			const text = document.getElementById("exporter").value;
+			try {
+				await navigator.clipboard.writeText(text);
+			} catch (err) {
+				// Fallback for older browsers or when clipboard API fails
+				const textarea = document.getElementById("exporter");
+				textarea.select();
+				textarea.setSelectionRange(0, 99999);
+				document.execCommand("copy");
+			}
 		},
 
 		toggleMenu

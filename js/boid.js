@@ -1,4 +1,17 @@
-class Boid extends V2D {
+import { V2D, v2dPool } from './v2d.js';
+import { random, constrain, hsv } from './util.js';
+import { opt } from './opt.js';
+
+// These will be injected from main.js
+let g = null;
+let app = null;
+
+export function setBoidGlobals(globals, pixiApp) {
+	g = globals;
+	app = pixiApp;
+}
+
+export class Boid extends V2D {
 	constructor(index) {
 		super(random(g.width), random(g.height));
 
@@ -54,9 +67,10 @@ class Boid extends V2D {
 	flock(flock) {
 		this.acc.zero();
 
-		const aln = new V2D();
-		const csn = new V2D();
-		const sep = new V2D();
+		// Use pooled vectors instead of allocating new ones each frame
+		const aln = v2dPool.get();
+		const csn = v2dPool.get();
+		const sep = v2dPool.get();
 
 		let [ns, ds] = this.neighbors(flock);
 
@@ -100,7 +114,8 @@ class Boid extends V2D {
 		}
 
 		if (g.mouse.down && g.mouse.over) {
-			const mv = new V2D(g.mouse.x, g.mouse.y);
+			// Use pooled vector instead of allocating new one
+			const mv = v2dPool.get(g.mouse.x, g.mouse.y);
 
 			const d = mv.sqrDist(this);
 
@@ -116,7 +131,8 @@ class Boid extends V2D {
 		}
 
 		if (g.explode > 0.001) {
-			const ev = g.explodePos.clone();
+			// Use pooled vector instead of clone()
+			const ev = v2dPool.get(g.explodePos.x, g.explodePos.y);
 
 			const d = ev.sqrDist(this);
 
