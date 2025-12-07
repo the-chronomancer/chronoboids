@@ -278,6 +278,179 @@
 				aria-labelledby="noise-label"
 			/>
 
+			<h4>GGDP Optimizations</h4>
+			<p class="info" style="font-size: 0.75rem; opacity: 0.7;">
+				Toggle dimensional optimizations to see performance impact
+			</p>
+
+			<div class="ggdp-section">
+				<div>
+					<input type="checkbox" id="spatialHash" data-model="spatialHash" />
+					<label for="spatialHash">
+						spatial hash
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">O(1) neighbor queries via grid partitioning. Disable for O(n²) baseline comparison.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="spatial"></span>
+				</div>
+
+				<div>
+					<input type="checkbox" id="mortonOrder" data-model="mortonOrder" />
+					<label for="mortonOrder">
+						morton order
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Cache-coherent iteration via Z-order curves. Improves L1/L2 cache hits.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="morton"></span>
+				</div>
+
+				<div>
+					<input type="checkbox" id="timeWheel" data-model="timeWheel" />
+					<label for="timeWheel">
+						time wheel
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Staggered updates: only 1/N boids get full physics each frame. Others interpolate.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="temporal"></span>
+				</div>
+				<div class="sub-control" id="timeWheel-opts">
+					<p id="timeWheelSlots-label">slots: <span data-show="timeWheelSlots"></span></p>
+					<input
+						type="range"
+						min="4"
+						max="32"
+						step="4"
+						data-model="timeWheelSlots"
+						aria-labelledby="timeWheelSlots-label"
+					/>
+				</div>
+
+				<div>
+					<input type="checkbox" id="hierarchicalTimeWheel" data-model="hierarchicalTimeWheel" />
+					<label for="hierarchicalTimeWheel">
+						hierarchical time
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Multi-level time wheel: active boids update fast, stationary boids update slow. Up to 128x capacity.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="hierarchical-temporal"></span>
+				</div>
+				<div class="sub-control" id="hierarchical-opts">
+					<p id="activityThreshold-label">activity threshold: <span data-show="activityThreshold"></span></p>
+					<input
+						type="range"
+						min="0.1"
+						max="2"
+						step="0.1"
+						data-model="activityThreshold"
+						aria-labelledby="activityThreshold-label"
+					/>
+				</div>
+
+				<div>
+					<input type="checkbox" id="geodesicPerception" data-model="geodesicPerception" />
+					<label for="geodesicPerception">
+						geodesic perception
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Blind spots: boids can't see directly behind them. More realistic flocking.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="perceptual"></span>
+				</div>
+				<div class="sub-control" id="geodesic-opts">
+					<p id="blindSpotAngle-label">blind spot: <span data-show="blindSpotAngle"></span>°</p>
+					<input
+						type="range"
+						min="0"
+						max="180"
+						step="15"
+						data-model="blindSpotAngle"
+						aria-labelledby="blindSpotAngle-label"
+					/>
+				</div>
+
+				<div>
+					<input type="checkbox" id="hyperbolicInfluence" data-model="hyperbolicInfluence" />
+					<label for="hyperbolicInfluence">
+						hyperbolic influence
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Sigmoid distance falloff: nearby neighbors matter much more than distant ones.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="influence"></span>
+				</div>
+
+				<div>
+					<input type="checkbox" id="flowField" data-model="flowField" />
+					<label for="flowField">
+						flow field
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">O(1) environmental forces (wind, thermals). Boids sample a force grid.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="flow"></span>
+				</div>
+				<div class="sub-control" id="flow-opts">
+					<p id="flowStrength-label">strength: <span data-show="flowStrength"></span></p>
+					<input
+						type="range"
+						min="0"
+						max="1"
+						step="0.05"
+						data-model="flowStrength"
+						aria-labelledby="flowStrength-label"
+					/>
+					<p id="windDirection-label">wind dir: <span data-show="windDirection"></span>°</p>
+					<input
+						type="range"
+						min="0"
+						max="360"
+						step="15"
+						data-model="windDirection"
+						aria-labelledby="windDirection-label"
+					/>
+					<p id="windStrength-label">wind: <span data-show="windStrength"></span></p>
+					<input
+						type="range"
+						min="0"
+						max="1"
+						step="0.05"
+						data-model="windStrength"
+						aria-labelledby="windStrength-label"
+					/>
+					<div>
+						<input type="checkbox" id="turbulence" data-model="turbulence" />
+						<label for="turbulence">turbulence</label>
+					</div>
+					<div>
+						<input type="checkbox" id="showFlowField" data-model="showFlowField" />
+						<label for="showFlowField">show flow field</label>
+					</div>
+				</div>
+
+				<div>
+					<input type="checkbox" id="visualFiber" data-model="visualFiber" />
+					<label for="visualFiber">
+						visual fiber
+						<span class="tooltip" role="tooltip">
+							?
+							<span class="tip">Stress-based coloring: boids change color based on crowding, edges, and speed.</span>
+						</span>
+					</label>
+					<span class="ggdp-metric" data-metric="visual"></span>
+				</div>
+			</div>
+
 			<h4>debug info</h4>
 
 			<input type="checkbox" id="debug" data-model="debug" />
@@ -285,6 +458,8 @@
 
 			<div id="debug-opts" role="group" aria-label="Debug options">
 				<p>fps: <span id="fps" aria-live="polite"></span></p>
+				<p>neighbor checks: <span id="neighbor-checks" aria-live="polite">--</span></p>
+				<p>physics: <span id="physics-time" aria-live="polite">--</span>ms</p>
 				<div>
 					<input type="checkbox" id="buckets" data-model="buckets" />
 					<label for="buckets"> show spatial subdivision</label>

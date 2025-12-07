@@ -42,6 +42,24 @@ export const DEFAULT_CONFIG: Readonly<SimulationConfig> = {
 	// Debug Settings
 	debug: false,
 	buckets: false,
+	showFlowField: false,
+
+	// GGDP Settings (Geometry-Guided Dynamic Programming)
+	spatialHash: true, // ON by default - baseline optimization
+	mortonOrder: false,
+	timeWheel: false,
+	timeWheelSlots: 16,
+	hierarchicalTimeWheel: false,
+	activityThreshold: 0.5, // Velocity below this = slower updates
+	geodesicPerception: false,
+	blindSpotAngle: 90, // degrees
+	hyperbolicInfluence: false,
+	flowField: false,
+	flowStrength: 0.1,
+	windDirection: 0, // degrees
+	windStrength: 0,
+	turbulence: false,
+	visualFiber: false,
 } as const;
 
 /**
@@ -77,6 +95,13 @@ export const SLIDER_CONFIGS: Record<string, SliderConfig> = {
 	maxSpeed: { min: 0, max: 12, step: 0.25, key: 'maxSpeed' },
 	drag: { min: 0, max: 0.05, step: 0.001, key: 'drag' },
 	noise: { min: 0, max: 10, step: 0.5, key: 'noise' },
+	// GGDP Sliders
+	timeWheelSlots: { min: 4, max: 32, step: 4, key: 'timeWheelSlots' },
+	activityThreshold: { min: 0.1, max: 2, step: 0.1, key: 'activityThreshold' },
+	blindSpotAngle: { min: 0, max: 180, step: 15, key: 'blindSpotAngle' },
+	flowStrength: { min: 0, max: 1, step: 0.05, key: 'flowStrength' },
+	windDirection: { min: 0, max: 360, step: 15, key: 'windDirection' },
+	windStrength: { min: 0, max: 1, step: 0.05, key: 'windStrength' },
 } as const;
 
 /**
@@ -94,6 +119,17 @@ export const CHECKBOX_KEYS: readonly (keyof SimulationConfig)[] = [
 	'bounce',
 	'debug',
 	'buckets',
+	'showFlowField',
 	'paused',
+	// GGDP Checkboxes
+	'spatialHash',
+	'mortonOrder',
+	'timeWheel',
+	'hierarchicalTimeWheel',
+	'geodesicPerception',
+	'hyperbolicInfluence',
+	'flowField',
+	'turbulence',
+	'visualFiber',
 ] as const;
 

@@ -39,6 +39,23 @@ const ENCODE_MAP: SettingsEncodingMap = {
 	debug: 'v',
 	buckets: 'w',
 	accuracy: 'z', // Derived value, included for compatibility
+	// GGDP settings
+	showFlowField: 'A',
+	spatialHash: 'B',
+	mortonOrder: 'C',
+	timeWheel: 'D',
+	timeWheelSlots: 'E',
+	hierarchicalTimeWheel: 'O',
+	activityThreshold: 'P',
+	geodesicPerception: 'F',
+	blindSpotAngle: 'G',
+	hyperbolicInfluence: 'H',
+	flowField: 'I',
+	flowStrength: 'J',
+	windDirection: 'K',
+	windStrength: 'L',
+	turbulence: 'M',
+	visualFiber: 'N',
 };
 
 /**

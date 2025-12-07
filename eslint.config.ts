@@ -72,6 +72,16 @@ export default tseslint.config(
 			eqeqeq: ['error', 'always'],
 			'prefer-const': 'error',
 			'no-var': 'error',
+
+			// Relaxed rules for specific patterns
+			'@typescript-eslint/restrict-template-expressions': [
+				'error',
+				{ allowNumber: true }, // Numbers are safe in templates
+			],
+			'@typescript-eslint/no-extraneous-class': 'off', // Allow static utility classes
+			'@typescript-eslint/no-non-null-assertion': 'warn', // Warn but don't error
+			'@typescript-eslint/consistent-generic-constructors': 'warn',
+			'@typescript-eslint/no-inferrable-types': 'warn',
 		},
 	},
 
@@ -89,7 +99,7 @@ export default tseslint.config(
 		},
 	},
 
-	// Test files
+	// Test files (relaxed rules - test code is not production code)
 	{
 		files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
 		rules: {
@@ -97,6 +107,9 @@ export default tseslint.config(
 			'@typescript-eslint/no-unsafe-assignment': 'off',
 			'@typescript-eslint/no-unsafe-call': 'off',
 			'@typescript-eslint/no-unsafe-member-access': 'off',
+			'@typescript-eslint/no-non-null-assertion': 'off', // Common in tests
+			'@typescript-eslint/explicit-function-return-type': 'off',
+			'@typescript-eslint/restrict-template-expressions': 'off',
 		},
 	},
 

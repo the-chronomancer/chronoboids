@@ -3,4 +3,5 @@
  */
 
 export { initSettingsPanel, toggleMenu, togglePause } from './SettingsPanel.js';
+export { PerformanceDashboard, performanceDashboard } from './PerformanceDashboard.js';
 

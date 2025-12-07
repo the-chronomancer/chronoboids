@@ -1,0 +1,32 @@
+[package]
+name = "boid-physics"
+version = "0.1.0"
+edition = "2021"
+description = "SIMD-accelerated physics calculations for boid simulation"
+authors = ["Chronoboids Contributors"]
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["wee_alloc"]
+
+[dependencies]
+wasm-bindgen = "0.2.95"
+js-sys = "0.3.72"
+
+# Smaller allocator for WASM
+wee_alloc = { version = "0.4.5", optional = true }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.45"
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+

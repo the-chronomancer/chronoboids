@@ -494,6 +494,113 @@ button:active {
 	--base: #d63031;
 }
 
+/* GGDP Section Styles */
+.ggdp-section {
+	margin: 10px 0;
+	padding: 10px;
+	background: rgba(47, 134, 201, 0.1);
+	border-radius: 8px;
+	border-left: 3px solid var(--base);
+}
+
+.ggdp-section > div {
+	margin: 8px 0;
+}
+
+.ggdp-metric {
+	float: right;
+	font-size: 0.75rem;
+	color: #74b9ff;
+	font-family: monospace;
+	opacity: 0.9;
+}
+
+.sub-control {
+	margin-left: 20px;
+	padding: 8px;
+	background: rgba(0, 0, 0, 0.2);
+	border-radius: 4px;
+	display: none;
+}
+
+.sub-control p {
+	font-size: 0.85rem;
+	margin: 4px 0;
+}
+
+.sub-control input[type="range"] {
+	margin: 4px 0 8px 0;
+}
+
+/* Show sub-controls when parent is checked */
+#timeWheel:checked ~ #timeWheel-opts,
+#geodesicPerception:checked ~ #geodesic-opts,
+#flowField:checked ~ #flow-opts {
+	display: block;
+}
+
+/* Performance Dashboard */
+#ggdp-dashboard {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	background: rgba(0, 0, 0, 0.8);
+	border: 1px solid var(--base);
+	border-radius: 8px;
+	padding: 12px 16px;
+	font-family: monospace;
+	font-size: 0.8rem;
+	min-width: 250px;
+	z-index: 100;
+	display: none;
+}
+
+#ggdp-dashboard.visible {
+	display: block;
+}
+
+#ggdp-dashboard h4 {
+	margin: 0 0 8px 0;
+	color: var(--base);
+	font-size: 0.9rem;
+}
+
+#ggdp-dashboard .metric-row {
+	display: flex;
+	justify-content: space-between;
+	margin: 4px 0;
+	padding: 2px 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#ggdp-dashboard .metric-row:last-child {
+	border-bottom: none;
+}
+
+#ggdp-dashboard .metric-name {
+	color: #ddd;
+}
+
+#ggdp-dashboard .metric-value {
+	color: #74b9ff;
+}
+
+#ggdp-dashboard .metric-value.enabled {
+	color: #55efc4;
+}
+
+#ggdp-dashboard .metric-value.disabled {
+	color: #636e72;
+}
+
+#ggdp-dashboard .summary {
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	font-size: 0.75rem;
+	color: #b2bec3;
+}
+
 /* queries */
 
 @media (prefers-reduced-motion: reduce) {

@@ -15,6 +15,7 @@
 import { Graphics, Container } from 'pixi.js';
 import type { BoidEntity } from '../entities/BoidEntity.js';
 import type { VisualSettings } from '../core/types.js';
+import { visualDimension } from '../ggdp/dimensions/VisualDimension.js';
 
 /**
  * Converts HSV color to RGB hex value.
@@ -129,8 +130,11 @@ export class BoidRenderer {
 		this.shape.y = this.entity.y;
 		this.shape.rotation = this.entity.velocity.angle();
 
-		// Update color based on speed
-		if (settings.hues) {
+		// Update color based on visual fiber (stress) or speed
+		if (visualDimension.enabled) {
+			// Use stress-based coloring from visual fiber
+			this.shape.tint = visualDimension.getColor(this.entity, maxSpeed);
+		} else if (settings.hues) {
 			const speedRatio = Math.min(this.entity.velocity.mag() / (maxSpeed * 2), 1);
 			this.shape.tint = hsvToHex(speedRatio, 1, 1);
 		} else {

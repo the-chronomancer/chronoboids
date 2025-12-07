@@ -70,6 +70,13 @@ export class SpatialHash<T extends Spatial> {
 	}
 
 	/**
+	 * Gets the current cell size.
+	 */
+	public getCellSize(): number {
+		return this.cellSize;
+	}
+
+	/**
 	 * Updates the grid dimensions if world size or cell size changed.
 	 * @returns true if dimensions changed
 	 */

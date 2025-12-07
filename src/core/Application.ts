@@ -3,6 +3,7 @@
  *
  * This class orchestrates all systems and handles the game loop.
  * Uses PIXI.js v8 async initialization pattern.
+ * Integrates GGDP dimensional optimizations with real-time metrics.
  */
 
 import { Application as PIXIApplication } from 'pixi.js';
@@ -15,6 +16,9 @@ import { configManager } from '../config/SimulationConfig.js';
 import { BoidPhysics, type PhysicsContext } from '../physics/BoidPhysics.js';
 import { eventBus } from './EventBus.js';
 import type { RuntimeState } from './types.js';
+import { performanceMetrics } from '../ggdp/metrics/PerformanceMetrics.js';
+import { ggdpManager } from '../ggdp/GGDPManager.js';
+import { performanceDashboard } from '../ui/PerformanceDashboard.js';
 
 /**
  * Main application class for the boids simulation.
@@ -107,6 +111,9 @@ export class ChronoBoids {
 		// Initial render sync
 		this.renderSystem.syncRenderers(this.flockingSystem.getBoids());
 
+		// Initialize performance dashboard
+		performanceDashboard.init();
+
 		this.initialized = true;
 	}
 
@@ -143,6 +150,9 @@ export class ChronoBoids {
 		) {
 			return;
 		}
+
+		// Begin frame metrics
+		performanceMetrics.beginFrame();
 
 		// Reset vector pool at start of frame
 		v2dPool.reset();
@@ -221,7 +231,17 @@ export class ChronoBoids {
 			if (fpsElement !== null) {
 				fpsElement.textContent = this.fps.toFixed(2);
 			}
+
+			// Show performance dashboard when debug is on
+			performanceDashboard.show();
+		} else {
+			performanceDashboard.hide();
 		}
+
+		// End frame metrics and update dashboard
+		performanceMetrics.endFrame();
+		ggdpManager.setBoidCount(this.flockingSystem.count);
+		performanceDashboard.update(this.flockingSystem.count);
 	}
 
 	/**

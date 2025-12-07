@@ -93,12 +93,50 @@ export interface DebugSettings {
 	readonly debug: boolean;
 	/** Show spatial subdivision grid */
 	readonly buckets: boolean;
+	/** Show flow field visualization */
+	readonly showFlowField: boolean;
+}
+
+/**
+ * GGDP (Geometry-Guided Dynamic Programming) settings.
+ */
+export interface GGDPSettings {
+	/** Enable spatial hash for O(1) neighbor queries */
+	readonly spatialHash: boolean;
+	/** Enable Morton-ordered bucket iteration for cache coherence */
+	readonly mortonOrder: boolean;
+	/** Enable time wheel for staggered updates */
+	readonly timeWheel: boolean;
+	/** Number of time wheel slots (1/N boids update per frame) */
+	readonly timeWheelSlots: number;
+	/** Enable hierarchical time wheel (multi-level with activity-based promotion) */
+	readonly hierarchicalTimeWheel: boolean;
+	/** Velocity threshold below which boids demote to slower update rate */
+	readonly activityThreshold: number;
+	/** Enable geodesic perception (blind spots) */
+	readonly geodesicPerception: boolean;
+	/** Blind spot angle in degrees */
+	readonly blindSpotAngle: number;
+	/** Enable hyperbolic distance falloff */
+	readonly hyperbolicInfluence: boolean;
+	/** Enable flow field forces */
+	readonly flowField: boolean;
+	/** Flow field force strength multiplier */
+	readonly flowStrength: number;
+	/** Wind direction in degrees */
+	readonly windDirection: number;
+	/** Wind strength */
+	readonly windStrength: number;
+	/** Enable turbulence */
+	readonly turbulence: boolean;
+	/** Enable visual fiber (stress-based coloring) */
+	readonly visualFiber: boolean;
 }
 
 /**
  * Complete simulation configuration.
  */
-export interface SimulationConfig extends VisualSettings, PhysicsSettings, DebugSettings {
+export interface SimulationConfig extends VisualSettings, PhysicsSettings, DebugSettings, GGDPSettings {
 	/** Whether simulation is paused */
 	readonly paused: boolean;
 	/** Number of boids in simulation */
